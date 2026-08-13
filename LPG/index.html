@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Live LPG cylinder level monitoring dashboard."
+    />
+    <title>Smart LPG Cylinder Monitoring System</title>
+    <link rel="preconnect" href="https://unpkg.com" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="stylesheet" href="style.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main class="dashboard-shell">
+      <header class="dashboard-header">
+        <div>
+          <p class="eyebrow">IoT Monitoring Dashboard</p>
+          <h1>Smart LPG Cylinder Monitoring System</h1>
+          <p class="subtitle">Live cylinder readings from your ESP32</p>
+        </div>
+        <div
+          id="connection-status"
+          class="connection-status disconnected"
+          role="status"
+          aria-live="polite"
+        >
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="connection-status-text">MQTT Disconnected</span>
+        </div>
+      </header>
+
+      <section class="dashboard-overview" aria-label="Live LPG overview">
+        <section class="level-card" aria-labelledby="level-heading">
+          <div class="level-card__content">
+            <p class="card-label" id="level-heading">Current LPG Level</p>
+            <div class="level-value">
+              <span id="lpg-percentage">--</span><span class="unit">%</span>
+            </div>
+            <div
+              class="level-progress"
+              role="progressbar"
+              aria-label="LPG level"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-valuenow="0"
+            >
+              <div id="level-progress-fill" class="level-progress__fill"></div>
+            </div>
+          </div>
+          <div class="level-card__footer">
+            <span>Live updates from <code>aswin/lpg/level</code></span>
+            <span id="last-updated">Waiting for data</span>
+          </div>
+        </section>
+
+        <section class="cylinder-card" aria-labelledby="cylinder-3d-heading">
+          <div class="cylinder-card__header">
+            <div>
+              <p class="card-label" id="cylinder-3d-heading">Live 3D Cylinder</p>
+              <p class="cylinder-card__hint">Drag to rotate · Scroll to zoom</p>
+            </div>
+            <span id="cylinder-level-label" class="cylinder-state" aria-live="polite">
+              Waiting for MQTT level
+            </span>
+          </div>
+          <div
+            id="cylinder-3d-viewport"
+            class="cylinder-3d-viewport"
+            role="img"
+            aria-label="Interactive 3D LPG cylinder waiting for a live MQTT reading"
+          ></div>
+        </section>
+      </section>
+
+      <section class="metrics-grid" aria-label="Cylinder metrics">
+        <article class="metric-card">
+          <div class="metric-icon metric-icon--blue" aria-hidden="true">kg</div>
+          <div>
+            <p class="card-label">LPG Remaining</p>
+            <p class="metric-value"><span id="lpg-remaining">--</span> <span class="metric-unit">kg</span></p>
+            <p class="metric-help">Out of 14.2 kg capacity</p>
+          </div>
+        </article>
+
+        <article class="metric-card">
+          <div class="metric-icon metric-icon--purple" aria-hidden="true">wt</div>
+          <div>
+            <p class="card-label">Total Cylinder Weight</p>
+            <p class="metric-value"><span id="total-weight">--</span> <span class="metric-unit">kg</span></p>
+            <p class="metric-help">Includes 15.3 kg empty cylinder</p>
+          </div>
+        </article>
+
+        <article id="status-card" class="metric-card status-card status-card--waiting">
+          <div id="status-icon" class="metric-icon metric-icon--neutral" aria-hidden="true">!</div>
+          <div>
+            <p class="card-label">Cylinder Status</p>
+            <p id="cylinder-status" class="status-value" aria-live="polite">WAITING FOR DATA</p>
+            <p id="status-help" class="metric-help">Awaiting a valid sensor reading</p>
+          </div>
+        </article>
+      </section>
+
+      <p id="message-feedback" class="message-feedback" role="status" aria-live="polite"></p>
+    </main>
+
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <script type="module" src="cylinder3d.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
