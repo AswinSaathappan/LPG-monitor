@@ -1,6 +1,6 @@
 const LPG_CAPACITY_KG = 14.2;
 const EMPTY_CYLINDER_WEIGHT_KG = 15.3;
-const brokerUrl = "wss://test.mosquitto.org:8081/mqtt";
+const brokerUrl = "ws://test.mosquitto.org:8080/mqtt";
 const MQTT_TOPIC = "aswin/lpg/level";
 const clientId =
   "lpg_dashboard_" + Math.random().toString(16).substring(2, 10);
